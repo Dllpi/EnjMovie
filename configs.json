@@ -1,0 +1,7 @@
+{
+  "DATABASE_PATH": "./kinopoisk.db",
+  "POSTERS_PATH": "./static/poster_images/",
+  "HINT_MESSAGE": "Информация о фильмах и рекомендации, основанные на контенте",
+  "MINIMUM_YEAR": 1900,
+  "MAXIMUM_YEAR": 2020
+}
