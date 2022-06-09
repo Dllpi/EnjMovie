@@ -20,7 +20,7 @@ class AppWindow(QMainWindow):
     def __init__(self, parent=None):
         super(AppWindow, self).__init__(parent)
 
-        with open('configs.json') as json_file:
+        with open('configs.json', encoding='utf-8') as json_file:
             self.configs = json.load(json_file)
 
         self.db = QSqlDatabase.addDatabase('QSQLITE')
