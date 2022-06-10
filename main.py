@@ -200,13 +200,36 @@ class AppWindow(QMainWindow):
             self.tableWidget.setImage(i, len(columns), poster_pixmap, 130, 180)
 
     def search_text_change(self):
-        movie_query_text = self.search_bar.toPlainText()
+        movie_query_text = self.search_bar.toPlainText().upper()
+        print(movie_query_text)
+        if movie_query_text == '':
+            return
+
+        string_query = 'SELECT * FROM movies'
+        if self.filter != '':
+            string_query += f'WHERE {self.filter}'
+
+        q = QSqlQuery(string_query)
+
+        search_results = []
+        while q.next():
+            id = q.value('id')
+            movie = q.value('movie')
+
+            movie = movie.upper()
+            if movie_query_text in movie:
+                search_results.append(int(id))
+
+        search_results.extend([1000, 10000]) # чтобы избавиться от запятой в одноэлементом tuple (кортеже)
+
         if self.filter == '':
-            new_filter = f"movie LIKE '%{movie_query_text.strip()}%'"
+            new_filter = f"id in {tuple(search_results)}"
         else:
-            new_filter = f"{self.filter} AND movie LIKE '%{movie_query_text.strip()}%'"
-        print(new_filter)
-        self.movies_model.setFilter(new_filter)
+            new_filter = f"{self.filter} AND id in {tuple(search_results)}%'"
+
+        if len(search_results) > 0:
+            self.movies_model.setFilter(new_filter)
+
 
         self.tableWidget.setRowCount(0)
 
